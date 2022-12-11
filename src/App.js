@@ -8,6 +8,7 @@ function App() {
   const [prefectures, setPrefectures] = useState([]);
   const [prefPopulation, setPrefPopulation] = useState([]);
   const [prefectureName, setPrefectureName] = useState([]);
+  const series = [];
 
   useEffect(() => {
     // 都道府県一覧を取得する
@@ -31,8 +32,9 @@ function App() {
     {
       // prefCodeを変数idに代入する
       let id = event.target.id
+
       // prefNameをsetPrefectureNameに代入する
-      setPrefectureName(event.target.name)
+      setPrefectureName([...prefectureName, event.target.name])
 
       // 人口情報を取得する
       axios
@@ -40,7 +42,7 @@ function App() {
           headers: { "X-API-KEY": process.env.REACT_APP_RESAS_API_KEY },
         })
         .then((res) => {
-          setPrefPopulation(res.data.result.data[0].data)
+          setPrefPopulation([...prefPopulation, res.data.result.data[0].data])
         })
         .catch((error) => {
           console.log(error)
@@ -59,12 +61,14 @@ function App() {
   }
 
   // 年度を定数yearsに代入する
-  const years = prefPopulation.map(population => population.year)
+  const years = prefPopulation.map(item => item.map(population => population.year))[0]
 
-  // 年度を定数seriesに代入する
-  const series = {
-    name: prefectureName,
-    data: prefPopulation.map(population => population.value),
+  // 都道府県名とその人口情報をを定数seriesに代入する
+  for (const index in prefectureName) {
+    series.push({
+      name: prefectureName[index],
+      data: prefPopulation.map(item => item.map(population => population.value))[index],
+    });
   }
 
   // Highchartsのグラフを作成
@@ -86,7 +90,7 @@ function App() {
         text: "人口数",
       },
     },
-    series: series
+    series: series,
   }
 
   return(
