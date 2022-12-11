@@ -8,7 +8,7 @@ function App() {
   const [prefectures, setPrefectures] = useState([]);
   const [prefPopulation, setPrefPopulation] = useState([]);
   const [prefectureName, setPrefectureName] = useState([]);
-  const series = [];
+  const copyPrefPopulation = prefPopulation.slice();
 
   useEffect(() => {
     // 都道府県一覧を取得する
@@ -26,23 +26,26 @@ function App() {
 
   const handleCheckbox = (event) => {
     const isChecked = event.target.checked
+    const checkedPrefName = event.target.name
+    const checkedPrefCode = event.target.id
 
     // チェックをつけた時の処理
     if(isChecked)
     {
-      // prefCodeを変数idに代入する
-      let id = event.target.id
-
       // prefNameをsetPrefectureNameに代入する
-      setPrefectureName([...prefectureName, event.target.name])
+      setPrefectureName([...prefectureName, checkedPrefName])
 
       // 人口情報を取得する
       axios
-        .get(`https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=${id}`, {
+        .get(`https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=${checkedPrefCode}`, {
           headers: { "X-API-KEY": process.env.REACT_APP_RESAS_API_KEY },
         })
         .then((res) => {
-          setPrefPopulation([...prefPopulation, res.data.result.data[0].data])
+          copyPrefPopulation.push({
+            name: checkedPrefName,
+            data: res.data.result.data[0].data,
+          });
+          setPrefPopulation(copyPrefPopulation);
         })
         .catch((error) => {
           console.log(error)
@@ -51,23 +54,27 @@ function App() {
     // チェックを外した時の処理
     else
     {
-      const removePrefName = [prefectureName]
-      const removePrefPopulation = [prefPopulation]
-      removePrefName.splice(0, 1)
-      removePrefPopulation.splice(0, 1)
+      const copyPrefName = [...prefectureName]
+      const deleteIndex = copyPrefPopulation.findIndex(prefInfo => prefInfo.name === checkedPrefName)
+
+      const removePrefName = copyPrefName.filter(prefName => prefName !== checkedPrefName)
+      copyPrefPopulation.splice(deleteIndex, 1)
+
       setPrefectureName(removePrefName)
-      setPrefPopulation(removePrefPopulation)
+      setPrefPopulation(copyPrefPopulation)
     }
   }
 
   // 年度を定数yearsに代入する
-  const years = prefPopulation.map(item => item.map(population => population.year))[0]
+  const years = prefPopulation.map(item => item.data.map(population => population.year))[0]
 
   // 都道府県名とその人口情報をを定数seriesに代入する
+  const series = [];
+  const populationData = prefPopulation.map(item => item.data.map(population => population.value))
   for (const index in prefectureName) {
     series.push({
       name: prefectureName[index],
-      data: prefPopulation.map(item => item.map(population => population.value))[index],
+      data: populationData[index],
     });
   }
 
