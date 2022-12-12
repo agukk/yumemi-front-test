@@ -3,12 +3,13 @@ import Highcharts from 'highcharts';
 import HighchartsReact from "highcharts-react-official";
 import { useEffect, useState } from "react";
 import "./App.css";
+import { CheckboxTitle } from "./components/atoms/CheckboxTitle";
+import { Title } from "./components/atoms/Title";
 
 function App() {
   const [prefectures, setPrefectures] = useState([]);
   const [prefPopulation, setPrefPopulation] = useState([]);
   const [prefectureName, setPrefectureName] = useState([]);
-  const copyPrefPopulation = prefPopulation.slice();
 
   useEffect(() => {
     // 都道府県一覧を取得する
@@ -25,11 +26,11 @@ function App() {
     }, []);
 
   const handleCheckbox = (event) => {
+    const copyPrefPopulation = prefPopulation.slice();
     const isChecked = event.target.checked
     const checkedPrefName = event.target.name
     const checkedPrefCode = event.target.id
 
-    // チェックをつけた時の処理
     if(isChecked)
     {
       // prefNameをsetPrefectureNameに代入する
@@ -51,7 +52,6 @@ function App() {
           console.log(error)
         })
     }
-    // チェックを外した時の処理
     else
     {
       const copyPrefName = [...prefectureName]
@@ -102,8 +102,8 @@ function App() {
 
   return(
     <>
-      <h1>yumemi-front-test</h1>
-      <h2>都道府県</h2>
+      <Title>yumemi-front-test</Title>
+      <CheckboxTitle>都道府県</CheckboxTitle>
       {prefectures.map((prefecture, index) => {
         return(
           <>
