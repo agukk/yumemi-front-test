@@ -65,11 +65,11 @@ export const Graph = () => {
   };
 
   const years = prefPopulation?.map((item) =>
-    item.data.map((population) => population.year),
+    item?.data?.map((population) => population.year),
   )[0];
   const series = [];
   const populationData = prefPopulation?.map((item) =>
-    item.data.map((population) => population.value),
+    item?.data?.map((population) => population.value),
   );
   for (const index in prefectureName) {
     series.push({
