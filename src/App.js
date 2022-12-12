@@ -12,7 +12,7 @@ function App() {
     <>
       <Title>yumemi-front-test</Title>
       <CheckboxTitle>都道府県</CheckboxTitle>
-      {prefectures.map((prefecture, index) => {
+      {prefectures?.map((prefecture, index) => {
         return (
           <>
             <label>
