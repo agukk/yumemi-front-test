@@ -1,5 +1,6 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import styled from "styled-components";
 import { useGetPrefectures } from "../../hooks/useGetPrefectures";
 import { useHandleCheckbox } from "../../hooks/useHandleCheckbox";
 import { CheckboxTitle } from "../atoms/CheckboxTitle";
@@ -51,24 +52,36 @@ export const Top = () => {
     <>
       <Title>yumemi-front-test</Title>
       <CheckboxTitle>都道府県</CheckboxTitle>
-      {prefectures &&
-        prefectures.map((prefecture, index) => {
-          return (
-            <>
-              <label>
-                <input
-                  key={index + 1}
-                  id={prefecture.prefCode}
-                  name={prefecture.prefName}
-                  type='checkbox'
-                  onChange={(event) => handleCheckbox(event)}
-                />
-                {prefecture.prefName}
-              </label>
-            </>
-          );
-        })}
+      <SCheckboxContent>
+        {prefectures &&
+          prefectures.map((prefecture, index) => {
+            return (
+              <>
+                <label>
+                  <input
+                    key={index + 1}
+                    id={prefecture.prefCode}
+                    name={prefecture.prefName}
+                    type='checkbox'
+                    onChange={(event) => handleCheckbox(event)}
+                  />
+                  {prefecture.prefName}
+                </label>
+              </>
+            );
+          })}
+      </SCheckboxContent>
       <HighchartsReact highcharts={Highcharts} options={options} />
     </>
   );
 };
+
+const SCheckboxContent = styled.div` 
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  justify-content: stretch;
+  margin-bottom: 6%;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
+`;
