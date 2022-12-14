@@ -76,7 +76,7 @@ export const Top = () => {
   );
 };
 
-const SCheckboxContent = styled.div` 
+const SCheckboxContent = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px 12px;
