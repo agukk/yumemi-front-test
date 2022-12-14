@@ -5,5 +5,6 @@ export const CheckboxTitle = ({ children }) => {
 };
 
 const SCheckboxTitle = styled.h2`
-  color: black;
+  font-size: clamp(0.5rem, 2vw + 1rem, 1.5rem);
+  margin: 1.5% 0 1.5% 1.5%;
 `;
