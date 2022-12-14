@@ -26,7 +26,6 @@ export const Top = () => {
     });
   }
 
-  // Highchartsのグラフを作成
   const options = {
     chart: {
       type: "line",

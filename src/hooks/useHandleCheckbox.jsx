@@ -12,10 +12,8 @@ export const useHandleCheckbox = () => {
     const checkedPrefCode = event.target.id;
 
     if (isChecked) {
-      // prefNameをsetPrefectureNameに代入する
       setPrefectureName([...prefectureName, checkedPrefName]);
 
-      // 人口情報を取得する
       client
         .get(`/population/composition/perYear?prefCode=${checkedPrefCode}`, {
           headers: { "X-API-KEY": process.env.REACT_APP_RESAS_API_KEY },
